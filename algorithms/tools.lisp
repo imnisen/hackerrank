@@ -4,6 +4,7 @@
 ;;; 获取得用到这个将字符集设置成utf-8
 ;;; (setf sb-impl::*default-external-format* :UTF-8)
 ;;; sbcl -- eval '(setf sb-impl::*default-external-format* :UTF-8)'
+;;; debug level : (declaim (optimize (debug 3)))
 
 (in-package #:hackerrank.tools)
 
@@ -42,7 +43,7 @@
     char-list))
 
 (defun read-line-to-string-list ()
-  "从标准输入读取一行，返回当中的字符(例如#\a)list"
+  "从标准输入读取一行，返回当中的字符串list"
   (let* ((line (read-line))
          (string-list (split-string-to-string-list line)))
     string-list))
