@@ -7,27 +7,47 @@
      :while integer
      :collect integer))
 
+(defun list-to-1d-array (a-list)
+  "列表转化成1维数组"
+  (make-array (length a-list)
+              :initial-contents a-list))
+
 (defun read-line-to-int-list ()
   "从标准输入读取一行，返回当中的整数list"
-  (let* ((line (read-line))
-         (int-list (split-string-to-integer-list line)))
-    int-list))
+  (let ((line (read-line)))
+    (split-string-to-integer-list line)))
+
+(defun read-line-to-int-array ()
+  "从标准输入读取一行，返回当中的整数array"
+  (let ((line (read-line)))
+    (list-to-1d-array (split-string-to-integer-list line))))
 
 (defun print-list-one-line-with-space (a-list)
   "将一个list输出到1行， 中间空格分割"
   (format t "~{~a ~}" a-list))
 
+(defun sum (a-list)
+  "一个数字列表或者数组 求和"
+  (reduce #'+ a-list))
+
+(defun array-slice (a-array start end)
+  "数组切片; 产生一个依赖原数组的displaced 数组;当切片start 或 end 大于数组长度，自动切短到数组长度；暂时不支持负值切片"
+  (let* ((l (length a-array))
+         (new-start (if (> start l) l start))
+         (new-end (if (> end l) l end))
+         (new-array-length (- new-end new-start)))
+    (make-array new-array-length
+                :displaced-to a-array
+                :displaced-index-offset new-start)))
+
 (defun main ()
   (let* ((n (read-line-to-int-list))
-         (number-list (read-line-to-int-list))
-         (number-list (read-line-to-int-list))
-         (max-score (first score-list))
-         (min-score (first score-list))
-         (break-max 0)
-         (break-min 0))
+         (number-array (read-line-to-int-array))
+         (l (length number-array))
+         (d-m-list (read-line-to-int-list)))
     (declare (ignore n))
-    (print-list-one-line-with-space
-     (loop :for score :in score-list
-        :do (cond ((> score max-score) (setq break-max (1+ break-max)) (setq max-score score))
-                  ((< score min-score) (setq break-min (1+ break-min)) (setq min-score score)))
-        :finally (return (list break-max break-min))))))
+    (destructuring-bind (d m) d-m-list
+      (if (>= l m)
+          (loop for i upto (- l m)
+             count (= d (sum (array-slice number-array i (+ i m)))))
+          0))))
