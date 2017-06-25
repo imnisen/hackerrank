@@ -101,3 +101,15 @@
     (make-array new-array-length
                 :displaced-to a-array
                 :displaced-index-offset new-start)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 查看值
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun print-hash (a-hash-table)
+  (format t "LENGTH: ~A" (hash-table-count a-hash-table))
+  (format t "~&-------------")
+  (loop for value being the hash-values of a-hash-table
+     using (hash-key key)
+     do (format t "~&~A  ->  ~A" key value))
+  (format t "~&-------------"))
