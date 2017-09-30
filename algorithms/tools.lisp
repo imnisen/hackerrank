@@ -6,7 +6,7 @@
 ;;; sbcl -- eval '(setf sb-impl::*default-external-format* :UTF-8)'
 ;;; debug level : (declaim (optimize (debug 3)))
 
-(in-package #:hackerrank.tools)
+;; (in-package #:hackerrank.tools)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 字符串分割相关
@@ -43,12 +43,12 @@
 (defun read-line-to-char-list ()
   "从标准输入读取一行，返回当中的字符(例如#\a)list"
   (let ((line (read-line)))
-    (char-list (split-string-to-char-list line))))
+    (split-string-to-char-list line)))
 
 (defun read-line-to-string-list ()
   "从标准输入读取一行，返回当中的字符串list"
   (let ((line (read-line)))
-    (string-list (split-string-to-string-list line))))
+    (split-string-to-string-list line)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -78,6 +78,18 @@
   (loop for i below (array-dimension a-array 0)
      collect (aref a-array i)))
 
+(defun string-to-integer (a-string)
+  "将字符串转成整形数字"
+  (nth-value 0 (parse-integer a-string :radix 10 :junk-allowed nil)))
+
+(defun number-to-string (a-number)
+  "将数字转化成字符串"
+  (write-to-string a-number :base 10))
+
+(defun string-to-number (a-string)
+  "将字符串转成数字，包括(正负)整形浮点型. 这里没有对a-string进行类型检查，如果传一个不全是数字的字符串，会返回其它类型数据"
+  (with-input-from-string (in a-string)
+    (read in)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 方便计算的函数
@@ -103,6 +115,17 @@
                 :displaced-index-offset new-start)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Hash table 操作相关
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun hash-value-to-list (a-hash)
+  (loop for value being the hash-values in a-hash collect value))
+
+(defun hash-key-to-list (a-hash)
+  (loop for key being the hash-keys in a-hash collect key))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 查看值
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -113,3 +136,12 @@
      using (hash-key key)
      do (format t "~&~A  ->  ~A" key value))
   (format t "~&-------------"))
+
+(defun print-and-return (x)
+  (format t "~&-------~&~a~&-------~&" x)
+  x)
+
+(defun print-cons (a-cons)
+  (loop for x in a-cons
+     do (format t "~&~a~&" x))
+  a-cons)
