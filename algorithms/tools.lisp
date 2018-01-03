@@ -138,7 +138,7 @@
   (format t "~&-------------"))
 
 (defun print-and-return (x)
-  (format t "~&-------~&~a~&-------~&" x)
+  (format t "~&---Start----~&~a~&---End----~&" x)
   x)
 
 (defun print-cons (a-cons)
