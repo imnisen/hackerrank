@@ -31,7 +31,15 @@
                 l))
 
 (defun find-biggest (data-structre k)
-  )
+  (loop for i bellow k do
+       (loop named inner for each in data-structre do
+            (when (not (= (first each) (second each)))
+              (if (> (first each) (second each))
+                  (setf each (list (first each) (first each) t))
+                  (setf each (list (second each) (second each) t)))
+              (return-from inner nil)))
+       ))
+       ))
 
 (defun main ()
   (let* ((first-input-line (read-line-to-int-list))
@@ -48,22 +56,46 @@
        for x across n-string
        for y across n-string-reversed
        for i below half-ceiling
-       do (setf data-structre (append data-structre (list (list x (if (and (not even?) (= i (1- half-ceiling))) nil y))))))
+       do (setf data-structre
+                (append data-structre
+                        (list (list x
+                                    (if (and (not even?)
+                                             (= i (1- half-ceiling)))
+                                        nil
+                                        y))))))
     (format t "~&~a~&" data-structre)
     (if (> (count-cons-different data-structre)  k)
         -1
         (find-biggest data-structre k))
     ))
 
+;; test case 1
+;;4 1
+;;3943
+;;3493
+;; =>3993
 
-;; ;; a question
-;; (defmacro m (a b c)
-;;   (if c `(+ ,a ,b)
-;;       `(- ,a ,b)))
+;; test case 2
+;; 6 3
+;; 092282
+;; => 992299
 
-;; (defun f (a b c)
-;;   (m a b c))
+;; test case 3
+;; 4 1
+;; 0011
+;; => -1
 
-;; (f 1 2 nil)
+;; 12341
+;; 14321
 
-;; how does mac know what form to expand in compile time
+;; '((1 1) (2 4) (3 nil) )
+
+;; 12341
+;; 14321
+
+;; '((1 1) (2 4) (3 nil) )
+
+;; 1231
+;; 1321
+
+;; '((1 1) (2 3) )
