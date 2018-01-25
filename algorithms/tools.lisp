@@ -137,6 +137,15 @@
      do (format t "~&~A  ->  ~A" key value))
   (format t "~&-------------"))
 
+(defun p-h-a-r (a-hash-table)
+  (format t "LENGTH: ~A" (hash-table-count a-hash-table))
+  (format t "~&-------------")
+  (loop for value being the hash-values of a-hash-table
+     using (hash-key key)
+     do (format t "~&~A  ->  ~A" key value))
+  (format t "~&-------------")
+  a-hash-table)
+
 (defun print-and-return (x)
   (format t "~&---Start----~&~a~&---End----~&" x)
   x)
